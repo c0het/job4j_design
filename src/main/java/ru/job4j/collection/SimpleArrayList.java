@@ -18,10 +18,15 @@ public class SimpleArrayList<T> implements List<T> {
         this.container = (T[]) new Object[capacity];
     }
 
+    private T[] grow() {
+        return container.length == 0 ? Arrays.copyOf(container, 10)
+                : Arrays.copyOf(container, container.length * 2);
+    }
+
     @Override
     public void add(T value) {
         if (container.length == size) {
-            container = Arrays.copyOf(container, container.length * 2);
+            container = grow();
         }
         container[size++] = value;
         modCount++;
@@ -29,16 +34,16 @@ public class SimpleArrayList<T> implements List<T> {
     }
 
     @Override
-    public T set(int index, T newValue) throws IndexOutOfBoundsException {
-        T element = container[Objects.checkIndex(index, container.length)];
+    public T set(int index, T newValue) {
+        T element = get(index);
         container[index] = newValue;
         modCount++;
         return element;
     }
 
     @Override
-    public T remove(int index) throws IndexOutOfBoundsException {
-        T rsl = container[Objects.checkIndex(index, container.length)];
+    public T remove(int index) {
+        T rsl = get(index);
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         modCount++;
         size--;
@@ -47,7 +52,8 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        return container[Objects.checkIndex(index, container.length)];
+        Objects.checkIndex(index, container.length);
+        return container[index];
 
     }
 
@@ -67,7 +73,7 @@ public class SimpleArrayList<T> implements List<T> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return indexForIterator < container.length && size != 0;
+                return indexForIterator < size && size != 0;
             }
 
             @Override
