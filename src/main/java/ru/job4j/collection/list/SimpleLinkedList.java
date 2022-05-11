@@ -4,8 +4,6 @@ import java.util.*;
 
 public class SimpleLinkedList<E> implements List<E> {
 
-    public  Node<E>[] container;
-
     transient Node<E> first;
 
     transient Node<E> last;
@@ -16,9 +14,6 @@ public class SimpleLinkedList<E> implements List<E> {
 
     private int indexForIterator;
 
-    public SimpleLinkedList() {
-        this.container = new Node[10];
-    }
 
     private static class Node<E> {
         E item;
@@ -32,23 +27,15 @@ public class SimpleLinkedList<E> implements List<E> {
         }
     }
 
-    private Node<E>[] grow() {
-    return Arrays.copyOf(container, container.length * 2);
-    }
-
-
     @Override
     public void add(E value) {
-        if (size == container.length) {
-            container = grow();
-        }
         Node<E> l = last;
-        container[size] = new Node<>(l, value, null);
-        last = container[size];
+        Node<E> newElem = new Node<>(l, value, null);
+        last = newElem;
         if (first == null) {
-            first = container[size];
+            first = newElem;
         } else {
-            l.next = container[size];
+            l.next = newElem;
         }
         size++;
         modCount++;
@@ -57,7 +44,11 @@ public class SimpleLinkedList<E> implements List<E> {
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        return container[index].item;
+        Node<E> rsl = first;
+        for (int i = 0; i != index; i++) {
+            rsl = rsl.next;
+        }
+        return rsl.item;
     }
 
     @Override
@@ -79,7 +70,7 @@ public class SimpleLinkedList<E> implements List<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return container[indexForIterator++].item;
+                return get(indexForIterator++);
             }
         };
     }

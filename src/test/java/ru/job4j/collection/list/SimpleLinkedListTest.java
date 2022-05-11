@@ -106,4 +106,11 @@ public class SimpleLinkedListTest {
         assertThat(list.get(12), Is.is(12));
 
     }
+
+    @Test
+    public void whenOnlyOneElement() {
+        List<Integer> list = new SimpleLinkedList<>();
+        list.add(1);
+        assertThat(list.get(0), Is.is(1));
+    }
 }
