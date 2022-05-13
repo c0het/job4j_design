@@ -26,10 +26,8 @@ public class ForwardLinked<T> implements Iterable<T> {
         }
         T delElem = head.value;
         if (head.next != null) {
-            while (head.next != null) {
-                head.value = head.next.value;
-                head.next = head.next.next;
-            }
+            head.value = head.next.value;
+            head.next = head.next.next;
         } else {
             head = null;
         }
