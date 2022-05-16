@@ -76,7 +76,7 @@ public class ForwardLinkedTest {
 
     @Test
     public void whenSize1ThenReturnFalse() {
-        ForwardLinked<Integer> singleList = new ForwardLinked<>();
+        ForwardLinked<Integer> singleList =  new ForwardLinked<>();
         singleList.add(1);
         assertFalse(singleList.revert());
     }
