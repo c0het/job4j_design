@@ -24,14 +24,14 @@ public class ForwardLinked<T> implements Iterable<T> {
         boolean rsl = false;
         if (head != null && head.next != null) {
             Node<T> node = head.next;
-            Node<T> tail =  head;
+            Node<T> node1 = head;
             head.next = null;
             while (node != null) {
+                node1.next = head;
                 head = node;
                 node = node.next;
-                head.next = tail;
-                tail = head;
             }
+            head.next = node1.next;
             rsl = true;
         }
         return rsl;
