@@ -32,6 +32,7 @@ public class SimpleSetTest {
         assertTrue(set.contains(1));
     }
 
+
     @Test
     public void whenSetIsEmpty() {
         Set<Integer> set = new SimpleSet<>();
