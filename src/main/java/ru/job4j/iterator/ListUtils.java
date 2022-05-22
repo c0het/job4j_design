@@ -42,6 +42,4 @@ public class ListUtils {
             removeIf(list, x -> x == element);
         }
     }
-
-
 }
