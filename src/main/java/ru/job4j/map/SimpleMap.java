@@ -12,9 +12,6 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     private int modCount = 0;
 
-    private int indexForIterator = 0;
-
-    private int foundElemInIterator = 0;
 
     private MapEntry<K, V>[] table = new MapEntry[capacity];
 
@@ -37,15 +34,18 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int indexFor(K key) {
-        return (table.length - 1) & hash(key);
+        return (capacity - 1) & hash(key);
     }
 
     private void expand() {
-        if (count / capacity >= LOAD_FACTOR) {
+        if ((float) count / (float) capacity >= LOAD_FACTOR) {
             capacity *= 2;
             MapEntry<K, V>[] tableForCopy = new MapEntry[capacity];
             for (MapEntry<K, V> mapEntry : table) {
-                tableForCopy[indexFor(mapEntry.key)] = mapEntry;
+                if (mapEntry != null) {
+                    tableForCopy[indexFor(mapEntry.key)] = mapEntry;
+                }
+
             }
             table = tableForCopy;
         }
@@ -55,7 +55,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public V get(K key) {
         V value = null;
         int i = indexFor(key);
-        if (table[i] != null) {
+        if (table[i] != null && table[i].key.equals(key)) {
             value = table[i].value;
         }
         return value;
@@ -64,7 +64,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean remove(K key) {
         int i = indexFor(key);
-        boolean rsl = table[i] != null;
+        boolean rsl = table[i] != null && table[i].key.equals(key);
         if (rsl) {
             table[i] = null;
             modCount++;
@@ -97,16 +97,18 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public Iterator<K> iterator() {
         final int expectedModCount = modCount;
         return new Iterator<>() {
+        int index = 0;
+
 
             @Override
             public boolean hasNext() throws ConcurrentModificationException {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                while (table[indexForIterator] == null && foundElemInIterator < count) {
-                    indexForIterator++;
+                while (index < capacity && table[index] == null) {
+                    index++;
                 }
-                return foundElemInIterator < count;
+                return index < capacity;
             }
 
             @Override
@@ -114,8 +116,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                foundElemInIterator++;
-                return table[indexForIterator++].key;
+                return table[index++].key;
             }
         };
     }
