@@ -11,9 +11,10 @@ public class SimpleTree<E> implements Tree<E> {
 
     @Override
     public boolean add(E parent, E child) {
-        boolean rsl = findBy(parent).isPresent() && findBy(child).isEmpty();
+        Optional<Node<E>> optional = findBy(parent);
+        boolean rsl = optional.isPresent() && findBy(child).isEmpty();
         if (rsl) {
-           findBy(parent).get().children.add(new Node<E>(child));
+           optional.get().children.add(new Node<E>(child));
         }
         return rsl;
     }
