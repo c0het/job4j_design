@@ -1,21 +1,25 @@
 package ru.job4j.question;
 
-import java.util.Set;
+import java.util.*;
 
 public class Analize {
 
     public static Info diff(Set<User> previous, Set<User> current) {
         Info info = new Info(0, 0, 0);
-        for (User c : current) {
-            if (!previous.contains(c)) {
-                if (previous.stream().anyMatch(p -> c.getId() == p.getId())) {
-                    info.setChanged(info.getChanged() + 1);
-                } else {
-                    info.setAdded(info.getAdded() + 1);
-                }
-            }
+        Map<Integer, String> mapUser = new HashMap<>();
+        for (User user : current) {
+            mapUser.put(user.getId(), user.getName());
         }
-        info.setDeleted(previous.size() - (current.size() - info.getAdded()));
+        for (User user : previous) {
+            if (!mapUser.containsKey(user.getId())) {
+                info.setDeleted(info.getDeleted() + 1);
+            } else if (!mapUser.get(user.getId()).equals(user.getName())) {
+                info.setChanged(info.getChanged() + 1);
+            }
+            mapUser.put(user.getId(), user.getName());
+        }
+        info.setAdded(Math.max(0, mapUser.size() - previous.size()));
         return info;
     }
 }
+

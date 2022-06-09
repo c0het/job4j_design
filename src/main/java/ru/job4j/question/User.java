@@ -24,6 +24,11 @@ public class User {
         return id == user.id && name.equals(user.name);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
     public int getId() {
         return id;
     }
@@ -36,14 +41,18 @@ public class User {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return "User{"
+                + "id=" + id
+                + ", name='" + name
+                + '\''
+                + '}';
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
 
-
-    }
 }
