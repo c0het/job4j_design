@@ -21,7 +21,7 @@ public class Config {
             if (!s.startsWith("#") && !s.equals("")) {
                 String[] keysAndValues = s.split("=");
                 if (keysAndValues.length < 2 || keysAndValues[0].isEmpty()) {
-                    throw new IllegalArgumentException("Не верно указан формат");
+                    throw new IllegalArgumentException();
                 }
                 values.put(keysAndValues[0], s.substring(keysAndValues[0].length() + 1));
             }
@@ -44,9 +44,8 @@ public class Config {
     }
 
     public static void main(String[] args) {
-        Config config = new Config("app.properties");
+        Config config = new Config("./data/wrong_format(=value).properties");
         config.load();
-        System.out.println(config.values.get("hibernate.connection.password"));
     }
 
 }
