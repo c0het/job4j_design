@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class Config {
 
@@ -17,14 +18,18 @@ public class Config {
     }
 
     public void load() {
-        for (String s: toString().split("\r\n")) {
-            if (!s.startsWith("#") && !s.equals("")) {
-                String[] keysAndValues = s.split("=");
-                if (keysAndValues.length < 2 || keysAndValues[0].isEmpty()) {
-                    throw new IllegalArgumentException();
+        try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
+            for (String s :(read.lines().collect(Collectors.joining(System.lineSeparator())).split("\r\n"))) {
+                if (!s.startsWith("#") && !s.equals("")) {
+                    String[] keysAndValues = s.split("=");
+                    if (keysAndValues.length < 2 || keysAndValues[0].isEmpty()) {
+                        throw new IllegalArgumentException("Не верно указан формат");
+                    }
+                    values.put(keysAndValues[0], s.substring(keysAndValues[0].length() + 1));
                 }
-                values.put(keysAndValues[0], s.substring(keysAndValues[0].length() + 1));
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
