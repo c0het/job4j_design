@@ -20,7 +20,7 @@ public class Config {
         for (String s: toString().split("\r\n")) {
             if (!s.startsWith("#") && !s.equals("")) {
                 String[] keysAndValues = s.split("=");
-                if (keysAndValues.length < 2 ||  keysAndValues[0].isEmpty()) {
+                if (keysAndValues.length < 2 || keysAndValues[0].isEmpty()) {
                     throw new IllegalArgumentException();
                 }
                 values.put(keysAndValues[0], s.substring(keysAndValues[0].length() + 1));
