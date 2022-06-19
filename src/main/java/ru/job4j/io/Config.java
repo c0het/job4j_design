@@ -10,20 +10,20 @@ import java.util.StringJoiner;
 public class Config {
 
     private final String path;
-    private final Map<String, String> values = new HashMap<String, String>();
+    private final Map<String, String> values = new HashMap<>();
 
     public Config(final String path) {
         this.path = path;
     }
 
     public void load() {
-        for (String s: toString().split("\n")) {
-            if (!s.contains("#") && !s.equals(" ")) {
+        for (String s: toString().split("\r\n")) {
+            if (!s.startsWith("#") && !s.equals("")) {
                 String[] keysAndValues = s.split("=");
                 if (keysAndValues.length < 2 || keysAndValues[0].isEmpty()) {
                     throw new IllegalArgumentException("Не верно указан формат");
                 }
-                values.put(keysAndValues[0], keysAndValues[1].replaceAll("\r", ""));
+                values.put(keysAndValues[0], s.substring(keysAndValues[0].length() + 1));
             }
         }
     }

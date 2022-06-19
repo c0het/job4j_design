@@ -51,6 +51,14 @@ public class ConfigTest {
         Config config = new Config(path);
         config.load();
     }
+
+    @Test
+    public void whenSomeSplitElem() {
+        String path = "./data/some_split_elem.properties";
+        Config config = new Config(path);
+        config.load();
+        assertThat(config.value("hibernate.dialect"), is("org.hibernate.dialect=PostgreSQL=Dialect"));
+    }
 }
 
 
