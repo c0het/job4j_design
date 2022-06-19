@@ -1,28 +1,22 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Analizy {
     public void unavailable(String source, String target) {
         try (PrintWriter out = new PrintWriter(new FileOutputStream(target));
              BufferedReader readBuf = new BufferedReader(new FileReader(source))) {
-            boolean flag400or500 = false;
-            boolean flag200or300 = false;
-            for (String read
-                    : readBuf.lines()
-                    .collect(Collectors.joining(System.lineSeparator()))
-                    .split("\r\n")) {
-                if (flag400or500 && Integer.parseInt(read.split(" ")[0]) == 400
-                        || Integer.parseInt(read.split(" ")[0]) == 500) {
-                    flag200or300 = true;
-                    out.print(read.substring(3));
-                } else if (flag200or300 && Integer.parseInt(read.split(" ")[0]) == 200
-                        || Integer.parseInt(read.split(" ")[0]) == 300) {
-                    flag400or500 = true;
-                    out.println(" -" + read.substring(3));
+            AtomicBoolean flag = new AtomicBoolean(true);
+            readBuf.lines().forEach(e -> {
+                if (flag.get() && (e.startsWith("400") || e.startsWith("500"))) {
+                    flag.set(false);
+                    out.print(e.substring(3));
+                } else if (!flag.get() && (e.startsWith("200") || e.startsWith("300"))) {
+                    out.println(" -" + e.substring(3));
+                    flag.set(true);
                 }
-            }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
