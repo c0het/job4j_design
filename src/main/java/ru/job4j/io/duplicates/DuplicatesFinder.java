@@ -14,8 +14,12 @@ public class DuplicatesFinder {
         try (PrintWriter out = new PrintWriter(new FileOutputStream("DuplicatesVisitor.jar"))) {
             for (FileProperty key : duplicatesVisitor.registry.keySet()) {
                 if (duplicatesVisitor.registry.get(key).size() != 1) {
-                    out.println(key);
-                    out.println(duplicatesVisitor.registry.get(key));
+                    System.out.println(key.getName() + " - " + key.getSize() + "b");
+                    out.println(key.getName() + " - " + key.getSize() + "b");
+                    for (Path paths: duplicatesVisitor.registry.get(key)) {
+                        System.out.println(paths.normalize().toFile().getAbsolutePath());
+                        out.println(paths.normalize().toFile().getAbsolutePath());
+                    }
                 }
             }
         } catch (IOException e) {
