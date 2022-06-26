@@ -22,10 +22,16 @@ public class Search {
     }
 
     public static void chekArgs(String[] args) {
-        if (args.length > 1 && !Paths.get(".").toAbsolutePath().toString().equals(args[0])) {
-            throw new IllegalArgumentException("Отсутствуют параметры или папка указана не корректно");
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Не все параметры указаны");
         }
-        if (!args[1].equals(".txt")) {
+        if (!Paths.get(args[0]).toFile().exists()) {
+            throw new IllegalArgumentException("Указаный каталог не существует");
+        }
+        if (!Paths.get(args[0]).toFile().isDirectory()) {
+            throw new IllegalArgumentException("Указаный путь ведет не каталогу");
+        }
+        if (!args[1].startsWith(".")) {
             throw new IllegalArgumentException("Расширение файла не верное");
         }
     }
