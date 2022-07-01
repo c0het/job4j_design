@@ -9,20 +9,20 @@ public class ArgsName {
 
     public String get(String key) {
         if (!values.containsKey(key)) {
-            throw new IllegalArgumentException("Запрашиваемого параметра не существует");
+            throw new IllegalArgumentException("Parameter does not exist");
         }
         return values.get(key);
     }
 
     private void parse(String[] args) {
         if (args.length == 0) {
-            throw new IllegalArgumentException("Не верное количество аргументов");
+            throw new IllegalArgumentException("No input parameters");
         }
 
         for (String arg : args) {
-            if (arg.split("=").length < 2 || arg.split("=")[0].startsWith("-")
-            ||arg.split("=")[0].substring(1).length() == 0) {
-                throw new IllegalArgumentException("Параметры указаны не верно");
+            if (arg.split("=").length < 2 || !arg.split("=")[0].startsWith("-")
+            || arg.split("=")[0].substring(1).length() == 0) {
+                throw new IllegalArgumentException("Parameters are incorrect");
             }
             values.put(arg.split("=")[0].substring(1), arg.substring(arg.split("=")[0].length() + 1));
         }
