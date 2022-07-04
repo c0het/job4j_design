@@ -15,20 +15,29 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("No input parameters");
-        }
-
         for (String arg : args) {
-            if (arg.split("=").length < 2 || !arg.split("=")[0].startsWith("-")
-            || arg.split("=")[0].substring(1).length() == 0) {
-                throw new IllegalArgumentException("Parameters are incorrect");
+            if (checkFormat(arg)) {
+                String[] argSplit = arg.split("=");
+                values.put(argSplit[0].substring(1), arg.substring(argSplit[0].length() + 1));
             }
-            values.put(arg.split("=")[0].substring(1), arg.substring(arg.split("=")[0].length() + 1));
         }
     }
 
+
+    private boolean checkFormat(String arg) {
+        boolean rsl = true;
+        if (arg.split("=").length < 2 || !arg.split("=")[0].startsWith("-")
+                || arg.split("=")[0].substring(1).length() == 0) {
+
+                throw new IllegalArgumentException("Parameters are incorrect");
+        }
+        return rsl;
+    }
+
     public static ArgsName of(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("No input parameters");
+        }
         ArgsName names = new ArgsName();
         names.parse(args);
         return names;
