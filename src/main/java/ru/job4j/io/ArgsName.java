@@ -16,8 +16,8 @@ public class ArgsName {
 
     private void parse(String[] args) {
         for (String arg : args) {
+            String[] argSplit = arg.split("=");
             if (checkFormat(arg)) {
-                String[] argSplit = arg.split("=");
                 values.put(argSplit[0].substring(1), arg.substring(argSplit[0].length() + 1));
             }
         }
