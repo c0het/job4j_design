@@ -12,11 +12,11 @@ public class Zip {
 
 
 
-    public void packFiles(List<File> sources, File target) {
+    public void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            for (File source : sources) {
-                zos.putNextEntry(new ZipEntry(source.getPath()));
-                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
+            for (Path source : sources) {
+                zos.putNextEntry(new ZipEntry(source.toString()));
+                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source.toString()))) {
                 zos.write(out.readAllBytes());
                 }
             }
@@ -25,30 +25,24 @@ public class Zip {
         }
     }
 
-    public void packSingleFile(File source, File target) {
-        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            zip.putNextEntry(new ZipEntry(source.getPath()));
-            try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
-                zip.write(out.readAllBytes());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static List<File> createSource(Path directory, String exclude) {
-        List<File> source = new ArrayList<>();
+    public static List<Path> createSource(Path directory, String exclude) {
+        List<Path> source = new ArrayList<>();
         try {
-                source = Search.search(directory, e -> !e.toFile().getName().endsWith(exclude)).stream()
-                        .map(Path::toFile)
-                        .collect(Collectors.toList());
+                source = Search.search(directory, e -> !e.toFile().getName().endsWith(exclude));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return source;
     }
 
+    private static void checkArgs(String[] args) {
+        if (args.length < 3) {
+            throw new IllegalArgumentException("not all parameters are specified");
+        }
+    }
+
     public static void main(String[] args) {
+        checkArgs(args);
         ArgsName argsName = ArgsName.of(args);
         Zip zip = new Zip();
         zip.packFiles(createSource(Path.of(argsName.get("d")), argsName.get("e")), new File(argsName.get("o")));
