@@ -16,18 +16,19 @@ public class ArgsName {
 
     private void parse(String[] args) {
         for (String arg : args) {
-            String[] argSplit = arg.split("=");
-            if (checkFormat(arg)) {
-                values.put(argSplit[0].substring(1), arg.substring(argSplit[0].length() + 1));
+            String[] argSplit = arg.split("=", 2);
+            if (checkFormat(argSplit)) {
+                values.put(argSplit[0].substring(1), argSplit[1]);
             }
         }
     }
 
 
-    private boolean checkFormat(String arg) {
+    private boolean checkFormat(String[] argSplit) {
         boolean rsl = true;
-        if (arg.split("=").length < 2 || !arg.split("=")[0].startsWith("-")
-                || arg.split("=")[0].substring(1).length() == 0) {
+        if (argSplit.length < 2 || !argSplit[0].startsWith("-")
+                || argSplit[0].substring(1).length() == 0
+                || argSplit[1].length() == 0) {
 
                 throw new IllegalArgumentException("Parameters are incorrect");
         }
