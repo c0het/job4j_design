@@ -29,8 +29,8 @@ public class ConsoleChat {
         log.add(whatSayUser);
         String whatSayBot = readPhrases();
         boolean flag = true;
-        while (!whatSayUser.equals(OUT)) {
-            if (!whatSayUser.equals(STOP)) {
+        while (!OUT.equals(whatSayUser)) {
+            if (!STOP.equals(whatSayUser)) {
                 System.out.println(whatSayBot);
                 log.add(whatSayBot);
                 whatSayBot = readPhrases();
@@ -41,9 +41,9 @@ public class ConsoleChat {
                 while (!flag) {
                     whatSayUser = scanner.nextLine();
                     log.add(whatSayUser);
-                    if (whatSayUser.equals(CONTINUE)) {
+                    if (CONTINUE.equals(whatSayUser)) {
                         flag = true;
-                    } else if (whatSayUser.equals(OUT)) {
+                    } else if (OUT.equals(whatSayUser)) {
                         break;
                     }
                 }
