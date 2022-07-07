@@ -40,10 +40,10 @@ public class Zip {
         if (args.length < 3) {
             throw new IllegalArgumentException("not all parameters are specified");
         }
-        if (!Path.of(argsName.get("d")).toFile().exists()) {
+        if (!Path.of(argsName.get("d")).toFile().isDirectory()) {
             throw new IllegalArgumentException("directory is incorrect");
         }
-        if (argsName.get("e").split("\\.")[1].length() == 0) {
+        if (!argsName.get("e").startsWith("*.")) {
             throw new IllegalArgumentException("no exception specified");
         }
         if (!argsName.get("o").endsWith(".zip")) {
