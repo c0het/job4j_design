@@ -2,6 +2,7 @@ package ru.job4j.io;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +39,15 @@ public class Zip {
     private static void checkArgs(String[] args) {
         if (args.length < 3) {
             throw new IllegalArgumentException("not all parameters are specified");
+        }
+        if (!Paths.get(args[0].substring(3)).toFile().exists()) {
+            throw new IllegalArgumentException("directory is incorrect");
+        }
+        if (args[1].substring(3).length() == 0) {
+            throw new IllegalArgumentException("no exception specified");
+        }
+        if (args[2].substring(3).length() == 0) {
+            throw new IllegalArgumentException("archive is not specified");
         }
     }
 
