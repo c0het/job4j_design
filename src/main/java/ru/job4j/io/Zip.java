@@ -46,7 +46,7 @@ public class Zip {
         if (argsName.get("e").split("\\.")[1].length() == 0) {
             throw new IllegalArgumentException("no exception specified");
         }
-        if (argsName.get("o").endsWith(".zip")) {
+        if (!argsName.get("o").endsWith(".zip")) {
             throw new IllegalArgumentException("archive is not specified");
         }
     }
