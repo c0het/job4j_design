@@ -36,24 +36,24 @@ public class Zip {
         return source;
     }
 
-    private static void checkArgs(String[] args) {
+    private static void checkArgs(String[] args, ArgsName argsName) {
         if (args.length < 3) {
             throw new IllegalArgumentException("not all parameters are specified");
         }
-        if (!Paths.get(args[0].substring(3)).toFile().exists()) {
+        if (!Path.of(argsName.get("d")).toFile().exists()) {
             throw new IllegalArgumentException("directory is incorrect");
         }
-        if (args[1].substring(3).length() == 0) {
+        if (argsName.get("e").split("\\.")[1].length() == 0) {
             throw new IllegalArgumentException("no exception specified");
         }
-        if (args[2].substring(3).length() == 0) {
+        if (argsName.get("o").endsWith(".zip")) {
             throw new IllegalArgumentException("archive is not specified");
         }
     }
 
     public static void main(String[] args) {
-        checkArgs(args);
         ArgsName argsName = ArgsName.of(args);
+        checkArgs(args, argsName);
         Zip zip = new Zip();
         zip.packFiles(createSource(Path.of(argsName.get("d")), argsName.get("e")), new File(argsName.get("o")));
     }
