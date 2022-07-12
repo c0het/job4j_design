@@ -7,7 +7,7 @@ public class CSVReader {
     public static void handle(ArgsName argsName) throws Exception {
         List<List<String>> lines = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
-        List<String> rsl = new ArrayList<>();
+
         try (Scanner scanner = new Scanner(new File(argsName.get("path")));
              PrintWriter out = new PrintWriter(new FileOutputStream(argsName.get("out")))) {
             while (scanner.hasNext()) {
