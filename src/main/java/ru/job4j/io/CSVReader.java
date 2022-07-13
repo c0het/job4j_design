@@ -42,13 +42,13 @@ public class CSVReader {
         if (!Paths.get(argsName.get("path")).toFile().exists()) {
             throw new IllegalArgumentException("file is not exist");
         }
-        if (!argsName.get("delimiter").equals("")) {
+        if (!argsName.get("delimiter").equals(";")) {
             throw new IllegalArgumentException("delimiter is not indicated");
         }
-        if (!argsName.get("out").equals("")) {
+        if (!argsName.get("out").equals("stdout")) {
             throw new IllegalArgumentException("out is not indicated");
         }
-        if (!argsName.get("filter").equals("")) {
+        if (argsName.get("filter").contains("name, age, last_name, education")) {
             throw new IllegalArgumentException("filter is empty");
         }
     }
