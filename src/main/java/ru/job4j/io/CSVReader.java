@@ -8,9 +8,13 @@ public class CSVReader {
     public static void handle(ArgsName argsName) {
         List<List<String>> lines = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
-        if (!"stdout".equals(argsName.get("out"))) {
-            try (Scanner scanner = new Scanner(new File(argsName.get("path")));
-                 PrintWriter out = new PrintWriter(new FileOutputStream(argsName.get("out")))) {
+        PrintWriter out = null;
+            try (Scanner scanner = new Scanner(new File(argsName.get("path")))) {
+                if ("stdout".equals(argsName.get("out"))) {
+                    out = new PrintWriter(System.out);
+                } else {
+                    out = new PrintWriter(new FileOutputStream(argsName.get("out")));
+                }
                 while (scanner.hasNext()) {
                     List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine().split(argsName.get("delimiter"))));
                     lines.add(line);
@@ -31,34 +35,9 @@ public class CSVReader {
                         }
                     }
                 }
+                out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        } else {
-            try (Scanner scanner = new Scanner(new File(argsName.get("path")))) {
-                while (scanner.hasNext()) {
-                    List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine().split(argsName.get("delimiter"))));
-                    lines.add(line);
-                }
-                for (String line : lines.get(0)) {
-                    for (String filter : argsName.get("filter").split(",")) {
-                        if (filter.equals(line)) {
-                            index.add(lines.get(0).indexOf(line));
-                        }
-                    }
-                }
-                for (List<String> line : lines) {
-                    for (int i : index) {
-                        if (index.indexOf(i) != index.size() - 1) {
-                            System.out.print(line.get(i) + ";");
-                        } else {
-                            System.out.print(line.get(i) + System.lineSeparator());
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
