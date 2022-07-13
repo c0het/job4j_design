@@ -8,8 +8,8 @@ public class CSVReader {
     public static void handle(ArgsName argsName) {
         List<List<String>> lines = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
-        PrintWriter out = null;
             try (Scanner scanner = new Scanner(new File(argsName.get("path")))) {
+                PrintWriter out;
                 if ("stdout".equals(argsName.get("out"))) {
                     out = new PrintWriter(System.out);
                 } else {
