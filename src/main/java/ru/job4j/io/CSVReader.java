@@ -8,30 +8,57 @@ public class CSVReader {
     public static void handle(ArgsName argsName) {
         List<List<String>> lines = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File(argsName.get("path")));
-             PrintWriter out = new PrintWriter(new FileOutputStream(argsName.get("out")))) {
-            while (scanner.hasNext()) {
-                List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine().split(argsName.get("delimiter"))));
-                lines.add(line);
-            }
-            for (String line : lines.get(0)) {
-                for (String filter : argsName.get("filter").split(",")) {
-                    if (line.equals(filter)) {
-                        index.add(lines.get(0).indexOf(line));
+        if (!"stdout".equals(argsName.get("out"))) {
+            try (Scanner scanner = new Scanner(new File(argsName.get("path")));
+                 PrintWriter out = new PrintWriter(new FileOutputStream(argsName.get("out")))) {
+                while (scanner.hasNext()) {
+                    List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine().split(argsName.get("delimiter"))));
+                    lines.add(line);
+                }
+                for (String line : lines.get(0)) {
+                    for (String filter : argsName.get("filter").split(",")) {
+                        if (filter.equals(line)) {
+                            index.add(lines.get(0).indexOf(line));
+                        }
                     }
                 }
-            }
-            for (List<String> line : lines) {
+                for (List<String> line : lines) {
                     for (int i : index) {
                         if (index.indexOf(i) != index.size() - 1) {
                             out.print(line.get(i) + ";");
-                    } else {
+                        } else {
                             out.print(line.get(i) + System.lineSeparator());
                         }
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            try (Scanner scanner = new Scanner(new File(argsName.get("path")))) {
+                while (scanner.hasNext()) {
+                    List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine().split(argsName.get("delimiter"))));
+                    lines.add(line);
+                }
+                for (String line : lines.get(0)) {
+                    for (String filter : argsName.get("filter").split(",")) {
+                        if (filter.equals(line)) {
+                            index.add(lines.get(0).indexOf(line));
+                        }
+                    }
+                }
+                for (List<String> line : lines) {
+                    for (int i : index) {
+                        if (index.indexOf(i) != index.size() - 1) {
+                            System.out.print(line.get(i) + ";");
+                        } else {
+                            System.out.print(line.get(i) + System.lineSeparator());
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -42,11 +69,8 @@ public class CSVReader {
         if (!Paths.get(argsName.get("path")).toFile().exists()) {
             throw new IllegalArgumentException("file is not exist");
         }
-        if (!argsName.get("delimiter").equals(";")) {
+        if (!";".equals(argsName.get("delimiter"))) {
             throw new IllegalArgumentException("delimiter is not indicated");
-        }
-        if (!argsName.get("out").equals("stdout")) {
-            throw new IllegalArgumentException("out is not indicated");
         }
         if (argsName.get("filter").contains("name, age, last_name, education")) {
             throw new IllegalArgumentException("filter is empty");
