@@ -34,8 +34,8 @@ public class CSVReader {
                             out.print(line.get(i) + System.lineSeparator());
                         }
                     }
+                    out.flush();
                 }
-                out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
         }
