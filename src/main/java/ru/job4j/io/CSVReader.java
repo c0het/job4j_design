@@ -1,13 +1,13 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class CSVReader {
-    public static void handle(ArgsName argsName) throws Exception {
+    public static void handle(ArgsName argsName) {
         List<List<String>> lines = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
-
         try (Scanner scanner = new Scanner(new File(argsName.get("path")));
              PrintWriter out = new PrintWriter(new FileOutputStream(argsName.get("out")))) {
             while (scanner.hasNext()) {
@@ -33,5 +33,29 @@ public class CSVReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void checkArgs(String[] args, ArgsName argsName) {
+        if (args.length < 4) {
+            throw new IllegalArgumentException("not all parameters entered");
+        }
+        if (!Paths.get(argsName.get("path")).toFile().exists()) {
+            throw new IllegalArgumentException("file is not exist");
+        }
+        if (!argsName.get("delimiter").equals("")) {
+            throw new IllegalArgumentException("delimiter is not indicated");
+        }
+        if (!argsName.get("out").equals("")) {
+            throw new IllegalArgumentException("out is not indicated");
+        }
+        if (!argsName.get("filter").equals("")) {
+            throw new IllegalArgumentException("filter is empty");
+        }
+    }
+
+    public static void main(String[] args) {
+        ArgsName argsName = ArgsName.of(args);
+        checkArgs(args, argsName);
+        handle(argsName);
     }
 }
