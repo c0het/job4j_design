@@ -7,7 +7,7 @@ public class UsageLog4j {
 
     private static final Logger LOG = LoggerFactory.getLogger(UsageLog4j.class.getName());
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         LOG.trace("trace message");
         LOG.debug("debug message");
         LOG.info("info message");
