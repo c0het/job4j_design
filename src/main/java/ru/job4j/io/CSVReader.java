@@ -4,19 +4,20 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static java.lang.System.out;
+
 public class CSVReader {
     public static void handle(ArgsName argsName) {
         List<List<String>> lines = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
-            try (Scanner scanner = new Scanner(new File(argsName.get("path")))) {
-                PrintWriter out;
-                if ("stdout".equals(argsName.get("out"))) {
-                    out = new PrintWriter(System.out);
-                } else {
-                    out = new PrintWriter(new FileOutputStream(argsName.get("out")));
-                }
+            try (Scanner scanner = new Scanner(new File(argsName.get("path")));
+                 PrintWriter out =
+                         ("stdout".equals(argsName.get("out"))
+                         ? new PrintWriter(System.out)
+                         : new PrintWriter(new FileOutputStream(argsName.get("out"))))) {
                 while (scanner.hasNext()) {
-                    List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine().split(argsName.get("delimiter"))));
+                    List<String> line = new ArrayList<>(Arrays.asList(scanner.nextLine()
+                            .split(argsName.get("delimiter"))));
                     lines.add(line);
                 }
                 for (String line : lines.get(0)) {
