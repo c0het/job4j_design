@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static java.lang.System.out;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) {
