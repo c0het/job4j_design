@@ -16,8 +16,9 @@ public class UsageLog4j {
         double d = 0.01;
         char c = "a".charAt(0);
         String s1 = "string";
-        LOG.debug("byte : {}, short : {}, : int : {}, : long : {}, float : {}, double : {}, char : {}, string : {}",
-                b, s, i, l, f, d, c, s1);
+        boolean bl = true;
+        LOG.debug("byte : {}, short : {}, : int : {}, : long : {}, float : {}, double : {}, char : {}, string : {}, boolean : {}",
+                b, s, i, l, f, d, c, s1, bl);
 
 
 
