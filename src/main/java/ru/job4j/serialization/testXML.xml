@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<customer numberOfOrder="3">
+    <contact zipCode="22" phone="444-444-444"/>
+    <customer managerName="Stanislav" vipStatus="false"/>
+    <oldOrders>
+        <oldOrded>1</oldOrded>
+        <oldOrded>2</oldOrded>
+    </oldOrders>
+</customer>
