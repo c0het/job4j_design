@@ -33,6 +33,8 @@ public class Contact implements Serializable {
         return phone;
     }
 
+
+
     @Override
     public String toString() {
         return "Contact{"

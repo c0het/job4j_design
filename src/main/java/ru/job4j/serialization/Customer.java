@@ -1,5 +1,7 @@
 package ru.job4j.serialization;
 
+import org.json.JSONObject;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -39,7 +41,25 @@ public class Customer {
         this.oldOrders = oldOrders;
     }
 
+    public int getNumberOfOrder() {
+        return numberOfOrder;
+    }
 
+    public Contact getContact() {
+        return contact;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public boolean isVipStatus() {
+        return vipStatus;
+    }
+
+    public int[] getOldOrders() {
+        return oldOrders;
+    }
 
     @Override
     public String toString() {
@@ -86,7 +106,13 @@ public class Customer {
     public static void main(String[] args) {
         Customer customer = new Customer(5454, new Contact(111,
                 "444-444-444"), "Stanislav", true, new int[]{5452, 5453});
-        System.out.println(convertObjToXml(customer));
-        System.out.println(readFromXml(customer));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("numberOfOrder", customer.getNumberOfOrder());
+        jsonObject.put("contact", customer.getContact());
+        jsonObject.put("managerName", customer.getManagerName());
+        jsonObject.put("vipStatus", customer.isVipStatus());
+        jsonObject.put("oldOrders", customer.getOldOrders());
+        System.out.println(jsonObject);
+        System.out.println(new JSONObject(customer).toString());
     }
 }
