@@ -1,0 +1,1 @@
+update equipment set status = false;
