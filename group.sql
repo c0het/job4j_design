@@ -21,9 +21,17 @@ INSERT INTO devices_people(device_id,people_id) VALUES (1,2),(1,3),(2,1),(3,2);
 
 SELECT AVG(d.price) FROM devices AS d;
 
-SELECT dp.people_id, AVG(d.price) AS "Средняя цена"
-FROM devices_people AS dp 
-JOIN devices AS d
-ON dp.device_id = d.id
-GROUP BY dp.people_id
-HAVING AVG(d.price) > 5000;
+SELECT dp.people_id, AVG(d.price) AS "Средняя цена", p.name
+FROM devices_people AS dp
+JOIN devices AS d ON dp.device_id = d.id
+JOIN people AS p ON p.id = dp.people_id
+GROUP BY dp.people_id, p.name;
+
+SELECT dp.people_id, AVG(d.price) AS "Средняя цена", p.name
+FROM devices_people AS dp
+JOIN devices AS d ON dp.device_id = d.id
+JOIN people AS p ON p.id = dp.people_id
+GROUP BY dp.people_id, p.name
+HAVING  AVG(d.price) > 5000;
+
+
