@@ -41,10 +41,10 @@ WHERE c.body_id IS null;
 
 SELECT ce.name
 FROM car_engines ce
-LEFT JOIN cars c ON c.body_id = ce.id
+LEFT JOIN cars c ON c.engine_id = ce.id
 WHERE c.body_id IS null;
 
 SELECT ct.name
 FROM car_transmissions ct
-LEFT JOIN cars c ON c.body_id = ct.id
+LEFT JOIN cars c ON c.transmission_id = ct.id
 WHERE c.body_id IS null;
