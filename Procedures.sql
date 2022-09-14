@@ -22,9 +22,20 @@ AS $$
 	END;
 $$;
 
+CREATE PROCEDURE delet(d_id integer)
+LANGUAGE 'plpgsql' 
+AS
+$$
+	BEGIN
+		DELETE FROM productss WHERE id = d_id;
+	END;
+$$
+
+DROP PROCEDURE delet(d_id integer);
 DROP PROCEDURE delet_if_count_is_0(u_count integer, u_id integer);
 
-CALL delet_if_count_is_0(0, 4);
+CALL delet_if_count_is_0(0, 1);
+CALL delet(3);
 
 SELECT *
 FROM productss
