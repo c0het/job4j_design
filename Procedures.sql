@@ -22,20 +22,29 @@ AS $$
 	END;
 $$;
 
-CREATE PROCEDURE delet(d_id integer)
+CREATE FUNCTION delet(d_id integer)
+RETURNS integer
 LANGUAGE 'plpgsql' 
 AS
 $$
+	DECLARE 
+		delet_product integer;
 	BEGIN
+		SELECT INTO delet_product id FROM productss WHERE id = d_id;
 		DELETE FROM productss WHERE id = d_id;
+		RETURN delet_product;
 	END;
 $$
 
-DROP PROCEDURE delet(d_id integer);
-DROP PROCEDURE delet_if_count_is_0(u_count integer, u_id integer);
+SELECT delet(2);
+
+SELECT *
+FROM productss;
 
 CALL delet_if_count_is_0(0, 1);
 CALL delet(3);
 
-SELECT *
-FROM productss
+
+DROP FUNCTION delet(d_id integer);
+DROP PROCEDURE delet_if_count_is_0(u_count integer, u_id integer);
+DROP TABLE productss;
