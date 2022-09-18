@@ -40,4 +40,13 @@ DECLARE
 	FETCH BACKWARD FROM cursor_products;
 	FETCH BACKWARD FROM cursor_products;
 	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
+	FETCH BACKWARD FROM cursor_products;
 COMMIT;
