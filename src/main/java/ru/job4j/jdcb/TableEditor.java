@@ -1,4 +1,5 @@
 package ru.job4j.jdcb;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
@@ -10,87 +11,67 @@ public class TableEditor implements AutoCloseable {
 
     private Properties properties;
 
-    public TableEditor(Properties properties) {
+    public TableEditor(Properties properties) throws ClassNotFoundException, SQLException {
         this.properties = properties;
         initConnection();
     }
 
-    public static Connection getConnection() throws Exception {
-        Properties config = new Properties();
-
-        try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("dbConnection.properties")) {
-            config.load(in);
-        }
-        Class.forName(config.getProperty("driver"));
-        return DriverManager.getConnection(config.getProperty("url"),
-                config.getProperty("username"), config.getProperty("password"));
+    private void initConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(properties.getProperty("driver"));
+        this.connection =  DriverManager.getConnection(properties.getProperty("url"),
+                properties.getProperty("username"), properties.getProperty("password"));
     }
 
-
-    private void initConnection() {
-        connection = null;
-    }
-
-    public static void createTable(String tableName) throws Exception {
-        try  (Connection connection = getConnection()) {
-           try (Statement statement = connection.createStatement()) {
-                String sql = String.format(
-                       "CREATE TABLE IF NOT EXISTS " + tableName + " (%s, %s);",
-                       "id serial PRIMARY KEY",
-                       "name varchar(255)"
-                );
-                statement.execute(sql);
-               System.out.println(getTableScheme(connection, tableName));
-           }
+    public void createStatment(String sql) {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static void dropTable(String tableName) throws Exception {
-        try  (Connection connection = getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                String sql = String.format(
-                        "DROP TABLE " + tableName
-                );
-                statement.execute(sql);
-                System.out.println(tableName + " is delete");
-            }
-        }
+    public void createTable(String tableName) throws Exception {
+        String sql = String.format(
+                "CREATE TABLE IF NOT EXISTS %s (%s, %s);", tableName,
+                "id serial PRIMARY KEY",
+                "name varchar(255)");
+        createStatment(sql);
+        System.out.println(getTableScheme(connection, tableName));
     }
 
-    public static void addColumn(String tableName, String columnName, String type) throws Exception {
-        try  (Connection connection = getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                String sql = String.format(
-                        "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + type
-                );
-                statement.execute(sql);
-                System.out.println(getTableScheme(connection, tableName));
-            }
-        }
+
+
+    public void dropTable(String tableName) throws Exception {
+        String sql = String.format(
+                "DROP TABLE %s", tableName
+        );
+        createStatment(sql);
+        System.out.println(tableName + " is delete");
     }
 
-    public static void dropColumn(String tableName, String columnName) throws Exception {
-        try  (Connection connection = getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                String sql = String.format(
-                        "ALTER TABLE " + tableName + " DROP COLUMN " + columnName
-                );
-                statement.execute(sql);
-                System.out.println(getTableScheme(connection, tableName));
-            }
-        }
+
+    public void addColumn(String tableName, String columnName, String type) throws Exception {
+        String sql = String.format(
+                "ALTER TABLE %s ADD COLUMN %s %s", tableName, columnName, type
+        );
+        createStatment(sql);
+        System.out.println(getTableScheme(connection, tableName));
     }
 
-    public static void renameColumn(String tableName, String columnName, String newColumnName) throws Exception {
-        try  (Connection connection = getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                String sql = String.format(
-                        "ALTER TABLE " + tableName + " RENAME COLUMN " + columnName + " TO " + newColumnName
-                );
-                statement.execute(sql);
-                System.out.println(getTableScheme(connection, tableName));
-            }
-        }
+    public void dropColumn(String tableName, String columnName) throws Exception {
+        String sql = String.format(
+                "ALTER TABLE " + tableName + " DROP COLUMN " + columnName
+        );
+        createStatment(sql);
+        System.out.println(getTableScheme(connection, tableName));
+    }
+
+    public void renameColumn(String tableName, String columnName, String newColumnName) throws Exception {
+        String sql = String.format(
+                "ALTER TABLE %s RENAME COLUMN %s TO %s", tableName, columnName, newColumnName
+        );
+        createStatment(sql);
+        System.out.println(getTableScheme(connection, tableName));
     }
 
 
@@ -121,11 +102,16 @@ public class TableEditor implements AutoCloseable {
     }
 
     public static void main(String[] args) throws Exception {
-        createTable("demo");
-        addColumn("demo", "count", "int");
-        renameColumn("demo", "count", "max");
-        dropColumn("demo", "max");
-        dropTable("demo");
+        Properties properties = new Properties();
+        try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("dbConnection.properties")) {
+            properties.load(in);
+        }
+        TableEditor tableEditor = new TableEditor(properties);
+        tableEditor.createTable("demo");
+        tableEditor.addColumn("demo", "count", "int");
+        tableEditor.renameColumn("demo", "count", "max");
+        tableEditor.dropColumn("demo", "max");
+        tableEditor.dropTable("demo");
     }
 
 
