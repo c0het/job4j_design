@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,10 +20,18 @@ public class ImportDB {
         this.dump = dump;
     }
 
+
     public List<User> load() throws IOException {
         List<User> users = new ArrayList<>();
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
-            rd.lines().forEach(l -> users.add(new User(l.split(";")[0], l.split(";")[1])));
+            rd.lines().forEach(l -> {
+                String[] line = l.split(";");
+                if (line.length == 2 && !line[0].contains(";") && !line[1].contains(";")) {
+                    users.add(new User(line[0], line[1]));
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            });
         }
         return users;
     }
