@@ -26,11 +26,11 @@ public class ImportDB {
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             rd.lines().forEach(l -> {
                 String[] line = l.split(";");
-                if (line.length == 2 && !line[0].contains(";") && !line[1].contains(";")) {
-                    users.add(new User(line[0], line[1]));
-                } else {
+                if (line.length != 2 && line[0].contains(";") && line[1].contains(";") && line[0].isBlank()
+                        && line[1].isBlank()) {
                     throw new IllegalArgumentException();
                 }
+                users.add(new User(line[0], line[1]));
             });
         }
         return users;
