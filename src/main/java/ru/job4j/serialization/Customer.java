@@ -1,5 +1,6 @@
 package ru.job4j.serialization;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.xml.bind.JAXBContext;
@@ -103,7 +104,7 @@ public class Customer {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JSONException {
         Customer customer = new Customer(5454, new Contact(111,
                 "444-444-444"), "Stanislav", true, new int[]{5452, 5453});
         JSONObject jsonObject = new JSONObject();

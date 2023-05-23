@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.NoSuchElementException;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class SimpleQueueTest {
